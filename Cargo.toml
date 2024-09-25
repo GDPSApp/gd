@@ -1,0 +1,52 @@
+[package]
+name = "gd"
+version = "0.0.0"
+authors = ["nekitdev <nekit@nekit.dev>"]
+edition = "2021"
+description = "Geometry Dash API wrapper written in Rust."
+documentation = "https://docs.rs/gd"
+readme = "README.md"
+repository = "https://github.com/nekitdev/gd"
+license = "MIT"
+keywords = ["gd", "api"]
+categories = ["parser-implementations"]
+
+[dependencies.aes]
+version = "0.8.4"
+
+[dependencies.base64]
+version = "0.22.1"
+
+[dependencies.bon]
+version = "2.3.0"
+
+[dependencies.capnp]
+version = "0.20.0"
+
+[dependencies.ecb]
+version = "0.1.2"
+features = ["std"]
+
+[dependencies.flate2]
+version = "1.0.33"
+features = ["zlib"]
+
+[dependencies.miette]
+version = "7.2.0"
+features = ["fancy"]
+
+[dependencies.reqwest]
+version = "0.12.7"
+
+[dependencies.serde]
+version = "1.0.210"
+features = ["derive"]
+
+[dependencies.sha1]
+version = "0.10.6"
+
+[dependencies.thiserror]
+version = "1.0.63"
+
+[dependencies.xor-cipher]
+version = "4.0.0"
