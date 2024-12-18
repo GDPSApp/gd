@@ -18,11 +18,11 @@ impl<'t, P: Processor> Default for Thunk<'t, P> {
 pub use Thunk::{Processed, Unprocessed};
 
 impl<'t, P: Processor> Thunk<'t, P> {
-    pub fn is_unprocessed(&self) -> bool {
+    pub const fn is_unprocessed(&self) -> bool {
         matches!(self, Unprocessed(_))
     }
 
-    pub fn is_processed(&self) -> bool {
+    pub const fn is_processed(&self) -> bool {
         matches!(self, Processed(_))
     }
 

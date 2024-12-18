@@ -6,8 +6,8 @@ use thiserror::Error;
 #[derive(Debug, Error, Diagnostic)]
 #[error("invalid utf-8 was found")]
 #[diagnostic(
-    code(gd::crypto::base64::utf8),
-    help("make sure the output is valid utf-8")
+    code(gd::crypto::utf8::convert),
+    help("make sure the input is valid utf-8")
 )]
 pub struct Error(#[from] pub FromUtf8Error);
 

@@ -4,16 +4,15 @@ use std::borrow::Cow;
 use bon::Builder;
 use serde::{Deserialize, Serialize};
 
-use crate::entities::{artist::Artist, base::Entity};
+use crate::{entities::artist::Artist, primitives::id::Id};
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Builder)]
-pub struct SongReference {
-    #[serde(flatten)]
-    pub entity: Entity,
+pub struct Reference {
+    pub id: Id,
     pub custom: bool,
 }
 
-impl SongReference {
+impl Reference {
     pub fn is_custom(&self) -> bool {
         self.custom
     }
@@ -21,8 +20,7 @@ impl SongReference {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Builder)]
 pub struct Song<'s> {
-    #[serde(flatten)]
-    pub entity: Entity,
+    pub id: Id,
     pub name: Cow<'s, str>,
     pub artist: Artist<'s>,
 }

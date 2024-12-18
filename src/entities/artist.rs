@@ -3,12 +3,11 @@ use std::{borrow::Cow, fmt};
 use bon::Builder;
 use serde::{Deserialize, Serialize};
 
-use crate::entities::base::Entity;
+use crate::primitives::id::Id;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Builder)]
 pub struct Artist<'a> {
-    #[serde(flatten)]
-    pub entity: Entity,
+    pub id: Id,
     pub name: Cow<'a, str>,
     pub verified: bool,
 }

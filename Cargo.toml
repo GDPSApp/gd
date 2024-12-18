@@ -23,6 +23,9 @@ version = "2.3.0"
 [dependencies.capnp]
 version = "0.20.0"
 
+[dependencies.dtoa]
+version = "1.0.9"
+
 [dependencies.ecb]
 version = "0.1.2"
 features = ["std"]
@@ -30,6 +33,9 @@ features = ["std"]
 [dependencies.flate2]
 version = "1.0.33"
 features = ["zlib"]
+
+[dependencies.itoa]
+version = "1.0.11"
 
 [dependencies.miette]
 version = "7.2.0"
@@ -47,6 +53,10 @@ version = "0.10.6"
 
 [dependencies.thiserror]
 version = "1.0.63"
+
+[dependencies.tokio]
+version = "1.40.0"
+features = ["full"]
 
 [dependencies.xor-cipher]
 version = "4.0.0"

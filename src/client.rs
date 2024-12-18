@@ -1,18 +1,23 @@
+// use std::time::Duration;
+
 use bon::Builder;
 
-use crate::credentials::Credentials;
+use crate::{
+    auth::{Auth, Credentials},
+    internals::session::Session,
+};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SimpleState;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AuthenticatedState<'a> {
-    pub credentials: Credentials<'a>,
+    pub auth: Auth<'a>,
 }
 
 impl<'a> AuthenticatedState<'a> {
-    pub fn new(credentials: Credentials<'a>) -> Self {
-        Self { credentials }
+    pub fn new(auth: Auth<'a>) -> Self {
+        Self { auth }
     }
 }
 
@@ -28,36 +33,54 @@ impl private::Sealed for AuthenticatedState<'_> {}
 impl State for SimpleState {}
 impl State for AuthenticatedState<'_> {}
 
-#[derive(Debug, Clone, PartialEq, Eq, Default, Builder)]
+/// Represents clients generic over their *state*.
+#[derive(Debug, Clone, Default, Builder)]
 pub struct Client<S: State> {
+    /// The session to use.
+    pub session: Session,
+    /// The state of the client, either *simple* or *authenticated*.
     pub state: S,
 }
 
+impl<S: State> Client<S> {
+    // pub async fn ping(&self) -> Result<Duration, http::Error> {
+    //     self.session.ping().await
+    // }
+}
+
+/// Represents *simple* clients.
 pub type Simple = Client<SimpleState>;
+
+/// Represents *authenticated* clients.
 pub type Authenticated<'c> = Client<AuthenticatedState<'c>>;
 
 impl Simple {
-    pub fn new() -> Self {
-        Self::builder().state(SimpleState).build()
+    pub fn new(session: Session) -> Self {
+        Self::builder().session(session).state(SimpleState).build()
+    }
+
+    pub async fn login<'c>(credentials: Credentials<'c>) {}
+
+    pub fn with_auth(self, auth: Auth<'_>) -> Authenticated<'_> {
+        Authenticated::new(self.session, auth)
+    }
+}
+
+impl Default for Simple {
+    fn default() -> Self {
+        Self::new(Session::default())
     }
 }
 
 impl<'a> Authenticated<'a> {
-    pub fn new(credentials: Credentials<'a>) -> Self {
+    pub fn new(session: Session, auth: Auth<'a>) -> Self {
         Self::builder()
-            .state(AuthenticatedState::new(credentials))
+            .session(session)
+            .state(AuthenticatedState::new(auth))
             .build()
     }
-}
 
-impl Simple {
-    pub async fn login(self) -> Authenticated<'static> {
-        todo!()
-    }
-}
-
-impl Authenticated<'_> {
-    pub async fn logout(self) -> Simple {
-        todo!()
+    pub fn into_simple(self) -> Simple {
+        Simple::new(self.session)
     }
 }
