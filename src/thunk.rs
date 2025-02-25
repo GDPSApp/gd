@@ -39,6 +39,8 @@ impl<'t, P: Processor> Thunk<'t, P> {
         }
     }
 
+    pub fn unprocess(&mut self) {}
+
     pub fn to_unprocessed(&self) -> Result<Cow<'_, str>, P::UnprocessError> {
         match self {
             Unprocessed(unprocessed) => Ok(Cow::Borrowed(unprocessed)),

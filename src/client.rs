@@ -21,21 +21,21 @@ impl<'a> AuthenticatedState<'a> {
     }
 }
 
-pub trait State: private::Sealed {}
+pub trait State: sealed::Sealed {}
 
-mod private {
+mod sealed {
     pub trait Sealed {}
 }
 
-impl private::Sealed for SimpleState {}
-impl private::Sealed for AuthenticatedState<'_> {}
+impl sealed::Sealed for SimpleState {}
+impl sealed::Sealed for AuthenticatedState<'_> {}
 
 impl State for SimpleState {}
 impl State for AuthenticatedState<'_> {}
 
 /// Represents clients generic over their *state*.
 #[derive(Debug, Clone, Default, Builder)]
-pub struct Client<S: State> {
+pub struct Client<S: State = SimpleState> {
     /// The session to use.
     pub session: Session,
     /// The state of the client, either *simple* or *authenticated*.
@@ -52,14 +52,14 @@ impl<S: State> Client<S> {
 pub type Simple = Client<SimpleState>;
 
 /// Represents *authenticated* clients.
-pub type Authenticated<'c> = Client<AuthenticatedState<'c>>;
+pub type Authenticated<'a> = Client<AuthenticatedState<'a>>;
 
 impl Simple {
     pub fn new(session: Session) -> Self {
         Self::builder().session(session).state(SimpleState).build()
     }
 
-    pub async fn login<'c>(credentials: Credentials<'c>) {}
+    pub async fn login<'c>(&self, credentials: Credentials<'c>) {}
 
     pub fn with_auth(self, auth: Auth<'_>) -> Authenticated<'_> {
         Authenticated::new(self.session, auth)

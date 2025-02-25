@@ -21,7 +21,7 @@ impl Version {
     pub const fn from_value(value: u8) -> Self {
         let (major, minor) = (value / BASE, value % BASE);
 
-        Self { major, minor }
+        Self::new(major, minor)
     }
 
     pub const fn into_value(self) -> u8 {
